@@ -3,7 +3,7 @@ import fastify from "fastify"
 import { TaskController } from "./controllers/task-controller"
 import { TaskService } from "./services/task-service"
 import { InMemoryTaskRepository } from "./repositories/in-memory-task-repository"
-import { registerTaskRoutes } from "./routes/task-routes"
+import { registerTaskRoutes } from "./routes/register-task-routes"
 
 const app = fastify({ logger: true }) as unknown as AppInterface
 
