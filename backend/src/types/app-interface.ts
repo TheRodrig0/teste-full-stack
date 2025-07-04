@@ -9,7 +9,7 @@ export interface AppInterface {
     ): void
     register(
         plugin: Function,
-        opts?: Record<string, string | number | boolean>
+        opts?: Record<string, string | number | boolean | string[]>
     ): Promise<void>
     ready(): Promise<void>
     printRoutes(): string
