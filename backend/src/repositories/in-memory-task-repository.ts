@@ -1,31 +1,23 @@
 import type { CrudRepositoryInterface } from "../types/crud-repository-interface"
-import type {
-    CreateTaskDTO,
-    UpdateTaskDTO,
-    ReplyTaskDTO
-} from "../types/task-dtos"
+import type { CreateTask, UpdateTask, Task } from "../types/task-dtos"
 
-export class InMemoryTaskRepository implements CrudRepositoryInterface<CreateTaskDTO, UpdateTaskDTO, ReplyTaskDTO> {
-    private tasks: Map<string, ReplyTaskDTO> = new Map()
+export class InMemoryTaskRepository implements CrudRepositoryInterface<CreateTask, UpdateTask, Task> {
+    private tasks: Map<string, Task> = new Map()
 
-    async findAll(): Promise<ReplyTaskDTO[]> {
+    async findAll(): Promise<Task[]> {
         return [...this.tasks.values()]
     }
 
-    async findById(id: string): Promise<ReplyTaskDTO | null> {
+    async findById(id: string): Promise<Task | null> {
         return this.tasks.get(id) || null
     }
 
-    async create(data: CreateTaskDTO): Promise<ReplyTaskDTO> {
+    async create(data: CreateTask): Promise<Task> {
         const id = crypto.randomUUID()
-        const createdAt = new Date().toISOString()
-        const updatedAt = new Date().toISOString()
         const completed = false
 
-        const newTask: ReplyTaskDTO = {
+        const newTask: Task = {
             id,
-            createdAt,
-            updatedAt,
             completed,
             ...data
         }
@@ -35,19 +27,16 @@ export class InMemoryTaskRepository implements CrudRepositoryInterface<CreateTas
         return newTask
     }
 
-    async update(id: string, data: UpdateTaskDTO): Promise<ReplyTaskDTO | null> {
+    async update(id: string, data: UpdateTask): Promise<Task | null> {
         const task = this.tasks.get(id)
 
         if (!task) {
             return null
         }
 
-        const updatedAt = new Date().toISOString()
-
-        const updatedTask: ReplyTaskDTO = {
+        const updatedTask: Task = {
             ...task,
             ...data,
-            updatedAt
         }
 
         this.tasks.set(id, updatedTask)
