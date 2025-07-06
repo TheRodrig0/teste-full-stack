@@ -1,17 +1,9 @@
-export interface CreateTaskDTO {
-    title: string
-    description?: string
-}
-
-export interface UpdateTaskDTO extends Partial<CreateTaskDTO> {
-    completed?: boolean
-}
-
-export interface ReplyTaskDTO {
+export interface Task {
     id: string
     title: string
     description?: string
     completed: boolean
-    createdAt: string
-    updatedAt: string
 }
+
+export type CreateTask = Omit<Task, 'id' | 'completed'>
+export type UpdateTask = Partial<Omit<Task, 'id'>>
