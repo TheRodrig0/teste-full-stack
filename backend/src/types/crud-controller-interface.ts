@@ -1,26 +1,10 @@
+import type { ReplyInterface } from "../../src/types/common/reply-interface"
 import type { RequestInterface } from "./common/request-interface"
-import type { ReplyInterface } from "./common/reply-interface"
 
-export interface CrudControllerInterface<REQ_BODY> {
-    findAll(request: RequestInterface, reply: ReplyInterface): Promise<ReplyInterface>
-
-    findById(
-        request: RequestInterface,
-        reply: ReplyInterface
-    ): Promise<ReplyInterface>
-
-    create(
-        request: RequestInterface<REQ_BODY>,
-        reply: ReplyInterface
-    ): Promise<ReplyInterface>
-
-    update(
-        request: RequestInterface<REQ_BODY>,
-        reply: ReplyInterface
-    ): Promise<ReplyInterface>
-
-    delete(
-        request: RequestInterface,
-        reply: ReplyInterface
-    ): Promise<ReplyInterface>
+export interface CrudControllerInterface<CreateDTO, UpdateDTO> {
+    findAll(request: RequestInterface, reply: ReplyInterface): Promise<void>
+    findById(request: RequestInterface<unknown, { id: string }>, reply: ReplyInterface): Promise<void>
+    create(request: RequestInterface<CreateDTO>, reply: ReplyInterface): Promise<void>
+    update(request: RequestInterface<UpdateDTO, { id: string }>, reply: ReplyInterface): Promise<void>
+    delete(request: RequestInterface<unknown, { id: string }>, reply: ReplyInterface): Promise<void>
 }
