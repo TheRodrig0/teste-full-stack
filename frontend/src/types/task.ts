@@ -7,4 +7,4 @@ export interface Task {
     updatedAt: string
 }
 
-export type newTask = Pick<Task, "title" | "description">
+export type NewTask = Pick<Task, "title" | "description">
