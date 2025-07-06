@@ -7,6 +7,5 @@ interface SendInterface {
 
 export interface ReplyInterface {
     status(statusCode: number): ReplyInterface
-    send(payload?: SendInterface): ReplyInterface
-    code(code: number): ReplyInterface
+    send(payload?: SendInterface | unknown): ReplyInterface
 }
