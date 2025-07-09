@@ -1,45 +1,52 @@
-import type { CrudControllerInterface } from "../types/crud-controller-interface"
-import type { CrudServiceInterface } from "../types/crud-service-interface"
-import type { ReplyInterface } from "../types/common/reply-interface"
-import type { RequestInterface } from "../types/common/request-interface"
-import type { Task, CreateTask, UpdateTask } from "../types/task-dtos"
+import type { CrudControllerInterface, CrudServiceInterface } from "../types/crud-interfaces"
+import type { ReplyInterface, RequestInterface } from "../types/common/http-interfaces"
+import type { Task, CreateTask, UpdateTask } from "../types/dtos/task-dtos"
+import type { User } from "../types/dtos/user-dto"
 
 export class TaskController implements CrudControllerInterface<CreateTask, UpdateTask> {
     constructor(private readonly service: CrudServiceInterface<CreateTask, UpdateTask, Task>) { }
 
     async findAll(request: RequestInterface, reply: ReplyInterface): Promise<void> {
-        const tasks = await this.service.findAll()
+        const user = request.user as User
+        const tasks = await this.service.findAll({ userId: user.id })
 
         reply.status(200)
-            .send({ data: tasks })
+            .send(tasks)
     }
 
-    async findById(request: RequestInterface<unknown, { id: string }>, reply: ReplyInterface): Promise<void> {
+    async findOne(request: RequestInterface<unknown, { id: string }>, reply: ReplyInterface): Promise<void> {
+        const user = request.user as User
         const { id } = request.params
-        const task = await this.service.findById(id)
+        const task = await this.service.findOne({ id, userId: user.id })
 
         reply.status(200)
-            .send({ data: task })
+            .send(task)
     }
 
     async create(request: RequestInterface<CreateTask>, reply: ReplyInterface): Promise<void> {
-        const newTask = await this.service.create(request.body)
+        const user = request.user as User
+        const newTask = await this.service.create({
+            ...request.body,
+            userId: user.id
+        })
 
         reply.status(201)
-            .send({ data: newTask })
+            .send(newTask)
     }
 
     async update(request: RequestInterface<UpdateTask, { id: string }>, reply: ReplyInterface): Promise<void> {
+        const user = request.user as User
         const { id } = request.params
-        const updatedTask = await this.service.update(id, request.body)
+        const updatedTask = await this.service.update({ id, userId: user.id }, request.body)
 
         reply.status(200)
-            .send({ data: updatedTask })
+            .send(updatedTask)
     }
 
     async delete(request: RequestInterface<unknown, { id: string }>, reply: ReplyInterface): Promise<void> {
+        const user = request.user as User
         const { id } = request.params
-        await this.service.delete(id)
+        await this.service.delete({ id, userId: user.id })
 
         reply.status(204)
             .send()
