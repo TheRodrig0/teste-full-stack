@@ -1,5 +1,4 @@
-import type { ReplyInterface } from "./common/reply-interface"
-import type { RequestInterface } from "./common/request-interface"
+import type { RequestInterface, ReplyInterface } from "./common/http-interfaces"
 
 type HttpRequestType = <Body, Param>(
     path: string,
@@ -15,4 +14,8 @@ export interface AppInterface {
     post: HttpRequestType
     patch: HttpRequestType
     delete: HttpRequestType
+    addHook(
+        name: string,
+        hook: (request: RequestInterface, reply: ReplyInterface) => Promise<void>
+    ): void
 }
