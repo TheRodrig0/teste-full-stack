@@ -6,30 +6,42 @@ import { configDotenv } from "dotenv"
 import { errorMiddleware } from "./middlewares/error-middleware"
 import { TaskController } from "./controllers/task-controller"
 import { TaskService } from "./services/task-service"
-import { InMemoryTaskRepository } from "./repositories/in-memory-task-repository"
+import { PrismaTaskRepository } from "./repositories/prisma-task-repository"
+import { PrismaUserRepository } from "./repositories/prisma-user-repository"
+import { UserService } from "./services/user-service"
+import { GoogleAuthController } from "./controllers/google-auth-controller"
+import { GoogleAuthService } from "./services/google-auth-service"
 import { routes } from "./routes"
+
 
 configDotenv()
 
 const app = fastify({ logger: true }) as unknown as AppInterface
 
-const taskRepository = new InMemoryTaskRepository()
+const taskRepository = new PrismaTaskRepository()
 const taskService = new TaskService(taskRepository)
 const taskController = new TaskController(taskService)
 
+const userRepository = new PrismaUserRepository()
+const userService = new UserService(userRepository)
+
+const googleAuthService = new GoogleAuthService(userService)
+const googleController = new GoogleAuthController(googleAuthService)
+
 const controllers = {
-    task: taskController
+    task: taskController,
+    google: googleController
 } as const
 
 const buildApp = async (): Promise<void> => {
     await app.register(fastifyCors, {
         origin: process.env.FRONTEND_URL,
         methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-        allowedHeaders: ['Content-Type']
+        allowedHeaders: ['Content-Type', 'Authorization'] 
     })
 
     await app.register(fastifyRateLimit, {
-        max: 100,
+        max: 20,
         timeWindow: '1 minute'
     })
 
@@ -37,8 +49,7 @@ const buildApp = async (): Promise<void> => {
 
     await app.register(routes(controllers))
 
-    app.listen({ port: Number(process.env.PORT) })
-    console.log(app.printRoutes())
+    app.listen({ port: Number(process.env.PORT) || 3000 })
 }
 
 buildApp()
