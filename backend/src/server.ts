@@ -39,7 +39,7 @@ const buildApp = async (): Promise<void> => {
     })
 
     await app.register(fastifyRateLimit, {
-        max: 20,
+        max: 50,
         timeWindow: '1 minute'
     })
 
