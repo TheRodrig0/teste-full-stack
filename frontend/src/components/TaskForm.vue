@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, watch, defineProps, defineEmits } from 'vue'
 import type { Task, NewTask } from '../types/task'
+import { ref, watch, defineProps, defineEmits } from 'vue'
 
 const props = defineProps<{
   taskToEdit?: Task
@@ -31,16 +31,17 @@ function handleSubmit() {
     return
   }
 
-  if (props.taskToEdit) {
+  if (!props.taskToEdit) {
     emit('submit', {
-      ...props.taskToEdit,
       title: title.value,
       description: description.value
     })
+
     return
   }
 
   emit('submit', {
+    ...props.taskToEdit,
     title: title.value,
     description: description.value
   })

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
 import type { Task } from '../types/task'
+import { ref, computed } from 'vue'
 
 const props = defineProps<{
     tasks: Task[]

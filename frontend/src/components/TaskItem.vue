@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
 import type { Task } from '../types/task'
+import { defineProps, defineEmits } from 'vue'
 
 const props = defineProps<{
     task: Task

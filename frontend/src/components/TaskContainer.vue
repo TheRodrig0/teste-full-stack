@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import type { Task, NewTask } from '../types/task'
 import { onMounted, ref } from 'vue'
 import TaskForm from "./TaskForm.vue"
 import TaskList from "./TaskList.vue"
 import TaskItem from "./TaskItem.vue"
-import type { Task, NewTask } from '../types/task'
 import { getTasks, addTask, updateTask, deleteTask } from '../services/api-service'
 
 const tasks = ref<Task[]>([])
@@ -24,7 +24,7 @@ async function handleFormSubmit(payload: NewTask | Task) {
         title: payload.title,
         description: payload.description
     })
-    
+
     const index = tasks.value.findIndex(t => t.id === updated.id)
 
     if (index !== -1) {
