@@ -1,15 +1,24 @@
-import type { CrudRepositoryInterface } from "../types/crud-repository-interface"
-import type { CreateTask, UpdateTask, Task } from "../types/task-dtos"
+import type { CrudRepositoryInterface } from "../types/crud-interfaces"
+import type { CreateTask, UpdateTask, Task } from "../types/dtos/task-dtos"
 
 export class InMemoryTaskRepository implements CrudRepositoryInterface<CreateTask, UpdateTask, Task> {
-    private tasks: Map<string, Task> = new Map()
+    private tasks: Task[] = []
 
-    async findAll(): Promise<Task[]> {
-        return [...this.tasks.values()]
+    async findAll(where: Partial<Task>): Promise<Task[]> {
+        if (!where?.userId) {
+            return []
+        }
+        
+        return this.tasks.filter(task => task.userId === where.userId)
     }
 
-    async findById(id: string): Promise<Task | null> {
-        return this.tasks.get(id) || null
+    async findOne(where: Partial<Task>): Promise<Task | null> {
+        if(!where.id || !where.userId) {
+            return null
+        }
+
+        const task = this.tasks.find(t => t.id === where.id && t.userId === where.userId)
+        return task || null
     }
 
     async create(data: CreateTask): Promise<Task> {
@@ -19,38 +28,46 @@ export class InMemoryTaskRepository implements CrudRepositoryInterface<CreateTas
         const newTask: Task = {
             id,
             completed,
+            description: data.description ?? undefined,
             ...data
         }
 
-        this.tasks.set(id, newTask)
+        this.tasks.push(newTask)
 
         return newTask
     }
 
-    async update(id: string, data: UpdateTask): Promise<Task | null> {
-        const task = this.tasks.get(id)
-
-        if (!task) {
+    async update(where: Partial<Task>, data: UpdateTask): Promise<Task | null> {
+        if (!where.id || !where.userId) {
             return null
         }
 
+        const taskIndex = this.tasks.findIndex(t => t.id === where.id && t.userId === where.userId)
+
+        if (taskIndex === -1) {
+            return null
+        }
+
+        const originalTask = this.tasks[taskIndex]
+
         const updatedTask: Task = {
-            ...task,
+            ...originalTask,
             ...data,
         }
 
-        this.tasks.set(id, updatedTask)
+        this.tasks[taskIndex] = updatedTask
 
         return updatedTask
     }
 
-    async delete(id: string): Promise<boolean> {
-        if (!this.tasks.get(id)) {
+    async delete(where: Partial<Task>): Promise<boolean> {
+        if (!where.id || !where.userId) {
             return false
         }
 
-        this.tasks.delete(id)
-
-        return true
+        const initialLength = this.tasks.length
+        this.tasks = this.tasks.filter(t => !(t.id === where.id && t.userId === where.userId))
+        
+        return this.tasks.length < initialLength
     }
 }
