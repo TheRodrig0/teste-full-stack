@@ -2,7 +2,7 @@ import type { Task, NewTask } from '../types/task'
 import { apiFetch } from '../utils/api-fetch'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-const TASKS_ENDPOINT = `${API_BASE_URL}/task/`
+const TASKS_ENDPOINT = `${API_BASE_URL}task/`
 
 export function getTasks(): Promise<Task[]> {
   return apiFetch<Task[]>(TASKS_ENDPOINT)

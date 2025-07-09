@@ -5,6 +5,12 @@ export async function apiFetch<T>(endpoint: string, options: RequestInit = {}): 
         defaultHeaders['Content-Type'] = 'application/json'
     }
 
+    const token = localStorage.getItem('token')
+
+    if (token) {
+        defaultHeaders['Authorization'] = `Bearer ${token}`
+    }
+
     const config: RequestInit = {
         ...options,
         headers: {
@@ -25,6 +31,6 @@ export async function apiFetch<T>(endpoint: string, options: RequestInit = {}): 
     }
 
     const body = await response.json()
-    
-    return body.data as T
+
+    return body as T
 }
