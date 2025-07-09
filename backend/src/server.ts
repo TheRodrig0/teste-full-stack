@@ -13,11 +13,9 @@ import { GoogleAuthController } from "./controllers/google-auth-controller"
 import { GoogleAuthService } from "./services/google-auth-service"
 import { routes } from "./routes"
 
-
 configDotenv()
 
 const app = fastify({ logger: true }) as unknown as AppInterface
-
 const taskRepository = new PrismaTaskRepository()
 const taskService = new TaskService(taskRepository)
 const taskController = new TaskController(taskService)
@@ -49,7 +47,7 @@ const buildApp = async (): Promise<void> => {
 
     await app.register(routes(controllers))
 
-    app.listen({ port: Number(process.env.PORT) || 3000 })
+    app.listen({ port: Number(process.env.PORT) || 3000, host: '0.0.0.0' })
 }
 
 buildApp()

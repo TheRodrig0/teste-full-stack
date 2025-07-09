@@ -6,7 +6,7 @@ type HttpRequestType = <Body, Param>(
 ) => void
 
 export interface AppInterface {
-    listen(opts: { port: number }): Promise<string>
+    listen(opts: { port: number, host?: string }): Promise<string>
     register(plugin: unknown, opts?: Record<string, unknown>): Promise<void>
     printRoutes(): string
     setErrorHandler(handler: (error: Error & { statusCode: number }, request: RequestInterface, reply: ReplyInterface) => void): void
