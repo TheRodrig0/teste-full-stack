@@ -32,7 +32,7 @@ export const taskRoutes = (controller: CrudControllerInterface<unknown, unknown>
             await controller.create(request, reply)
         })
 
-        app.patch<unknown, { id: string }>(`${routePath}/:id`, async (request, reply) => {
+        app.patch<unknown, { id: string }>(`${routePath}:id`, async (request, reply) => {
             try {
                 UpdateTaskSchema.parse(request.body)
             } catch (error) {
