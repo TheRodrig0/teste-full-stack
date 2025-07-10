@@ -1,6 +1,7 @@
 import type { AppInterface } from "../types/app-interface"
 import type { CrudControllerInterface } from "../types/crud-interfaces"
 import { authMiddleware } from "../middlewares/auth-middleware"
+import { CreateTaskSchema, UpdateTaskSchema } from "../schemas/task-schemas"
 
 const routePath: string = "task/"
 
@@ -17,10 +18,31 @@ export const taskRoutes = (controller: CrudControllerInterface<unknown, unknown>
         })
 
         app.post(routePath, async (request, reply) => {
+            try {
+                CreateTaskSchema.parse(request.body)
+            } catch (error) {
+                reply.status(400).send({
+                    message: 'Invalid data.',
+                    errors: (error as { issues: string }).issues,
+                })
+
+                return
+            }
+
             await controller.create(request, reply)
         })
 
-        app.patch<unknown, { id: string }>(`${routePath}:id`, async (request, reply) => {
+        app.patch<unknown, { id: string }>(`${routePath}/:id`, async (request, reply) => {
+            try {
+                UpdateTaskSchema.parse(request.body)
+            } catch (error) {
+                reply.status(400).send({
+                    message: 'Invalid data',
+                    errors: (error as { issues: string }).issues,
+                })
+                return
+            }
+
             await controller.update(request, reply)
         })
 
