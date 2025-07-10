@@ -120,7 +120,7 @@ npm test
 
 ## 🗺️ Endpoints da API
 
-A API segue um padrão RESTful. Todas as rotas de `/tasks` são protegidas e requerem um token JWT.
+A API segue um padrão RESTful. Todas as rotas de `/task/` são protegidas e requerem um token JWT.
 
 | Método | Rota                  | Descrição                            |
 | ------ | --------------------- | ------------------------------------ |
