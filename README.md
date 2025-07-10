@@ -126,11 +126,11 @@ A API segue um padrão RESTful. Todas as rotas de `/tasks` são protegidas e req
 | ------ | --------------------- | ------------------------------------ |
 | GET    | /auth/google/url      | Obtém a URL de autorização do Google |
 | GET    | /auth/google/callback | Rota de callback para o Google       |
-| GET    | /tasks                | Lista todas as tarefas do usuário    |
-| POST   | /tasks                | Cria uma nova tarefa                 |
-| GET    | /tasks/:id            | Obtém uma tarefa específica          |
-| PATCH  | /tasks/:id            | Atualiza uma tarefa                  |
-| DELETE | /tasks/:id            | Apaga uma tarefa                     |
+| GET    | /task/                | Lista todas as tarefas do usuário    |
+| POST   | /task/                | Cria uma nova tarefa                 |
+| GET    | /task/:id            | Obtém uma tarefa específica          |
+| PATCH  | /task/:id            | Atualiza uma tarefa                  |
+| DELETE | /task/:id            | Apaga uma tarefa                     |
 
 ---
 
