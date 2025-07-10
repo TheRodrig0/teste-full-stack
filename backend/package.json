@@ -21,7 +21,8 @@
     "jsonwebtoken": "^9.0.2",
     "prisma": "^6.11.1",
     "tsx": "^4.20.3",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "zod": "^4.0.1"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",
